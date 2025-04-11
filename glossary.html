@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PCelements</title>
+    <style>
+        :root {
+            --primary: #1a1a2e;
+            --secondary: #16213e;
+            --accent: #0f3460;
+            --highlight: #e94560;
+            --text: #f1f1f1;
+            --text-secondary: #b8b8b8;
+        }
+        
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--primary);
+            color: var(--text);
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+        
+        .button {
+            position: relative;
+            padding: 10px 20px;
+            border: none;
+            background: none;
+            cursor: pointer;
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text);
+        }
+        
+        .button .actual-text,
+        .button .hover-text {
+            position: relative;
+            transition: transform 0.3s ease;
+        }
+        
+        .button .hover-text {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            color: var(--highlight);
+        }
+        
+        .button:hover .actual-text {
+            transform: translateX(5px);
+        }
+        
+        .button:hover .hover-text {
+            opacity: 1;
+            transform: translateX(10px);
+        }
+        
+        header {
+            background-color: var(--secondary);
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.4);
+        }
+        
+        .product-detail {
+            display: flex;
+            padding: 50px 5%;
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .product-image {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .product-image img {
+            max-width: 100%;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+        
+        .product-info {
+            flex: 1;
+        }
+        
+        .product-info h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: var(--highlight);
+        }
+        
+        .product-info p {
+            margin-bottom: 20px;
+            color: var(--text-secondary);
+        }
+        
+        .product-info ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+        
+        .product-info ul li {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .price {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--text);
+        }
+        
+        .btn {
+            background-color: var(--highlight);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1rem;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            background-color: #d13354;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(233, 69, 96, 0.4);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--secondary);
+            margin-top: 50px;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <a href="#"><button class="button" data-text="Awesome">
+                <span class="actual-text">&nbsp;PCelements&nbsp;</span>
+                <span aria-hidden="true" class="hover-text">&nbsp;PCelements&nbsp;</span>
+            </button></a>
+        </div>
+        <nav>
+            <ul>
+                <li></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section class="product-detail">
+        <div class="product-image">
+            <div id="card-generator-container" style="width: 100%;"></div>
+        </div>
+        <div class="product-info">
+            <h1>PcElements card</h1>
+            <p>Профессиональный генератор виртуальных банковских карт для разработчиков и дизайнеров.</p>
+            <div id="form-container" style="width: 100%;"></div>
+            <div id="table-container" style="width: 100%; margin-top: 30px;"></div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 PCelements. Все права защищены.</p>
+    </footer>
+
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const container = document.getElementById('card-generator-container');
+        const formContainer = document.getElementById('form-container');
+        const tableContainer = document.getElementById('table-container');
+        
+        // Создание формы
+        const form = document.createElement('form');
+        form.style.width = '100%';
+        form.style.padding = '25px';
+        form.style.borderRadius = '10px';
+        form.style.backgroundColor = 'var(--secondary)';
+        form.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+
+        // Функция для создания элементов формы
+        const createLabel = (text) => {
+            const label = document.createElement('label');
+            label.textContent = text;
+            label.style.display = 'block';
+            label.style.marginBottom = '8px';
+            label.style.color = 'var(--text)';
+            label.style.fontWeight = '500';
+            return label;
+        };
+
+        const createInput = (type) => {
+            const input = document.createElement('input');
+            input.type = type;
+            input.required = true;
+            input.style.width = '100%';
+            input.style.padding = '12px';
+            input.style.borderRadius = '5px';
+            input.style.border = '1px solid var(--accent)';
+            input.style.marginBottom = '20px';
+            input.style.backgroundColor = 'var(--primary)';
+            input.style.color = 'var(--text)';
+            input.style.boxSizing = 'border-box';
+            return input;
+        };
+
+        // Создание выпадающих списков
+        const bankNameLabel = createLabel('Банк:');
+        const bankNameSelect = document.createElement('select');
+        bankNameSelect.style.width = '100%';
+        bankNameSelect.style.padding = '12px';
+        bankNameSelect.style.borderRadius = '5px';
+        bankNameSelect.style.border = '1px solid var(--accent)';
+        bankNameSelect.style.marginBottom = '20px';
+        bankNameSelect.style.backgroundColor = 'var(--primary)';
+        bankNameSelect.style.color = 'var(--text)';
+
+        const banks = {
+            'Сбербанк': 'https://i.pinimg.com/474x/b7/81/a5/b781a57c68f53b61cf0bc498d6174a92.jpg?nii=t',
+            'Тинькофф': 'https://i.pinimg.com/originals/b1/49/38/b149383b4226dcf9b40d30eae01ee56f.png',
+            'Альфа-Банк': 'https://sun9-67.userapi.com/s/v1/ig2/yOngZAflvdA7bJSS9_jZzHSrUaZQkFkv8rEBmBHlY2WV5txcsOQ7T1Wo6-Uvq1naDu3OLI-AjL3XnWzypm85vYaM.jpg?quality=95&as=32x21,48x32,72x48,108x72,160x106,240x159,360x239,480x318,540x358,640x424,720x478,1080x716,1170x776&from=bu&u=YfbZroaYecHYtUg-hXbzIP-7N8ExMBhHxYtnSE_6TX0&cs=807x535',
+            'ВТБ': 'https://tc-maxima.ru/wp-content/uploads/2023/11/bazgazbzsfbawjmcmi7gmsrm4zir48_fq7wec-vqq_zqkj21r8cxfd3i-mfdhxebpqsrcgv2exup3veozmb56z33.jpg',
+            'PE-Банка': 'c:\Users\Stu-2-11\Desktop\PC (3).png'
+        };
+
+        for (const [bankName, logoUrl] of Object.entries(banks)) {
+            const option = document.createElement('option');
+            option.value = logoUrl;
+            option.textContent = bankName;
+            bankNameSelect.appendChild(option);
+        }
+
+        const paymentSystemLabel = createLabel('Платежная система:');
+        const paymentSystemSelect = document.createElement('select');
+        paymentSystemSelect.style = bankNameSelect.style;
+
+        const paymentSystems = {
+            'Visa': 'https://upload.wikimedia.org/wikipedia/commons/4/41/Visa_Logo.png',
+            'Мир': 'https://avatars.mds.yandex.net/i?id=5277e7efcf02175e6152aa2ece5386cc_l-7451997-images-thumbs&n=13',
+            'Mastercard': 'https://d-a-plus.ru/upload/medialibrary/2aa/1tdab4x9wqqbsdkzjrofyi3tgx3ruhfy.jpg'
+        };
+
+        for (const [systemName, logoUrl] of Object.entries(paymentSystems)) {
+            const option = document.createElement('option');
+            option.value = logoUrl;
+            option.textContent = systemName;
+            paymentSystemSelect.appendChild(option);
+        }
+
+        // Создание полей формы
+        const cardNumberLabel = createLabel('Номер карты:');
+        const cardNumberInput = createInput('text');
+        cardNumberInput.pattern = '\\d{16}';
+        cardNumberInput.placeholder = 'XXXX XXXX XXXX XXXX';
+
+        const cardHolderLabel = createLabel('Держатель карты:');
+        const cardHolderInput = createInput('text');
+        cardHolderInput.placeholder = 'IVAN IVANOV';
+
+        const expiryDateLabel = createLabel('Срок действия:');
+        const expiryDateInput = createInput('month');
+
+        // Кнопка отправки
+        const submitButton = document.createElement('button');
+        submitButton.type = 'submit';
+        submitButton.textContent = 'Сгенерировать карту';
+        submitButton.className = 'btn';
+        submitButton.style.width = '100%';
+        submitButton.style.marginTop = '10px';
+
+        // Сборка формы
+        form.append(
+            bankNameLabel, bankNameSelect, 
+            paymentSystemLabel, paymentSystemSelect,
+            cardNumberLabel, cardNumberInput,
+            cardHolderLabel, cardHolderInput,
+            expiryDateLabel, expiryDateInput,
+            submitButton
+        );
+        
+        formContainer.appendChild(form);
+
+        // Создание превью карты
+        const cardPreview = document.createElement('div');
+        cardPreview.style.width = '100%';
+        cardPreview.style.height = '220px';
+        cardPreview.style.borderRadius = '15px';
+        cardPreview.style.padding = '25px';
+        cardPreview.style.background = 'linear-gradient(135deg, var(--accent), var(--secondary))';
+        cardPreview.style.color = 'white';
+        cardPreview.style.fontFamily = "'Courier New', monospace";
+        cardPreview.style.display = 'flex';
+        cardPreview.style.flexDirection = 'column';
+        cardPreview.style.justifyContent = 'space-between';
+        cardPreview.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.5)';
+        cardPreview.style.position = 'relative';
+        cardPreview.style.overflow = 'hidden';
+
+        // Эффект глянца
+        const gloss = document.createElement('div');
+        gloss.style.position = 'absolute';
+        gloss.style.top = '-50%';
+        gloss.style.right = '-50%';
+        gloss.style.width = '200%';
+        gloss.style.height = '200%';
+        gloss.style.background = 'linear-gradient(to bottom right, rgba(255, 255, 255, 0.15), rgba(255, 255, 255, 0))';
+        gloss.style.transform = 'rotate(30deg)';
+        cardPreview.appendChild(gloss);
+
+        // Элементы карты
+        const bankLogo = document.createElement('img');
+        bankLogo.style.width = '70px';
+        bankLogo.style.alignSelf = 'flex-end';
+
+        const chip = document.createElement('div');
+        chip.style.width = '50px';
+        chip.style.height = '40px';
+        chip.style.background = 'linear-gradient(to bottom right, #ffcc33, #ff9933)';
+        chip.style.borderRadius = '5px';
+        chip.style.marginTop = '15px';
+
+        const cardNumberPreview = document.createElement('div');
+        cardNumberPreview.style.fontSize = '22px';
+        cardNumberPreview.style.letterSpacing = '2px';
+        cardNumberPreview.style.marginTop = '20px';
+        cardNumberPreview.style.fontFamily = "'Courier New', monospace";
+        cardNumberPreview.textContent = '•••• •••• •••• ••••';
+
+        const cardHolderPreview = document.createElement('div');
+        cardHolderPreview.style.fontSize = '16px';
+        cardHolderPreview.style.textTransform = 'uppercase';
+        cardHolderPreview.style.marginTop = '10px';
+
+        const expiryDatePreview = document.createElement('div');
+        expiryDatePreview.style.fontSize = '14px';
+        expiryDatePreview.style.position = 'absolute';
+        expiryDatePreview.style.bottom = '25px';
+        expiryDatePreview.style.left = '25px';
+
+        const paymentSystemLogo = document.createElement('img');
+        paymentSystemLogo.style.width = '60px';
+        paymentSystemLogo.style.position = 'absolute';
+        paymentSystemLogo.style.bottom = '20px';
+        paymentSystemLogo.style.right = '25px';
+
+        cardPreview.append(
+            bankLogo, 
+            chip, 
+            cardNumberPreview, 
+            cardHolderPreview, 
+            expiryDatePreview, 
+            paymentSystemLogo
+        );
+        container.appendChild(cardPreview);
+
+        // Создание таблицы
+        const dataTable = document.createElement('table');
+        dataTable.style.width = '100%';
+        dataTable.style.borderCollapse = 'collapse';
+        dataTable.style.marginTop = '30px';
+        dataTable.style.backgroundColor = 'var(--secondary)';
+        dataTable.style.borderRadius = '10px';
+        dataTable.style.overflow = 'hidden';
+        dataTable.style.boxShadow = '0 5px 20px rgba(0, 0, 0, 0.3)';
+
+        const tableHeader = document.createElement('thead');
+        const headerRow = document.createElement('tr');
+        headerRow.style.backgroundColor = 'var(--accent)';
+
+        const headers = ['Банк', 'Платежная система', 'Номер карты', 'Держатель', 'Срок действия'];
+        headers.forEach(header => {
+            const th = document.createElement('th');
+            th.textContent = header;
+            th.style.padding = '15px';
+            th.style.textAlign = 'left';
+            headerRow.appendChild(th);
+        });
+        tableHeader.appendChild(headerRow);
+        dataTable.appendChild(tableHeader);
+
+        const tableBody = document.createElement('tbody');
+        dataTable.appendChild(tableBody);
+
+        tableContainer.appendChild(dataTable);
+
+        // Обработчик изменений в форме
+        form.addEventListener('input', function() {
+            bankLogo.src = bankNameSelect.value;
+            paymentSystemLogo.src = paymentSystemSelect.value;
+            
+            let cardNumber = cardNumberInput.value.replace(/\s/g, '');
+            if (cardNumber.length > 0) {
+                cardNumber = cardNumber.match(/.{1,4}/g).join(' ');
+            }
+            cardNumberPreview.textContent = cardNumber || '•••• •••• •••• ••••';
+            
+            cardHolderPreview.textContent = cardHolderInput.value || 'FULL NAME';
+            
+            if (expiryDateInput.value) {
+                const [year, month] = expiryDateInput.value.split('-');
+                expiryDatePreview.textContent = `VALID THRU: ${month}/${year.slice(2)}`;
+            } else {
+                expiryDatePreview.textContent = 'VALID THRU: ••/••';
+            }
+        });
+
+        // Обработчик отправки формы
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const newRow = document.createElement('tr');
+            newRow.style.borderBottom = '1px solid var(--accent)';
+            newRow.style.transition = 'background-color 0.3s';
+            
+            newRow.addEventListener('mouseover', () => {
+                newRow.style.backgroundColor = 'rgba(233, 69, 96, 0.1)';
+            });
+            
+            newRow.addEventListener('mouseout', () => {
+                newRow.style.backgroundColor = 'transparent';
+            });
+
+            const rowData = [
+                bankNameSelect.options[bankNameSelect.selectedIndex].text,
+                paymentSystemSelect.options[paymentSystemSelect.selectedIndex].text,
+                cardNumberInput.value.replace(/(\d{4})(?=\d)/g, '$1 '),
+                cardHolderInput.value.toUpperCase(),
+                expiryDateInput.value ? new Date(expiryDateInput.value).toLocaleDateString('ru-RU', {month: '2-digit', year: '2-digit'}) : ''
+            ];
+
+            rowData.forEach(data => {
+                const td = document.createElement('td');
+                td.textContent = data;
+                td.style.padding = '12px 15px';
+                td.style.borderBottom = '1px solid var(--accent)';
+                newRow.appendChild(td);
+            });
+
+            tableBody.appendChild(newRow);
+            
+            // Сброс формы и превью
+            form.reset();
+            bankLogo.src = '';
+            paymentSystemLogo.src = '';
+            cardNumberPreview.textContent = '•••• •••• •••• ••••';
+            cardHolderPreview.textContent = 'FULL NAME';
+            expiryDatePreview.textContent = 'VALID THRU: ••/••';
+        });
+    });
+    </script>
+</body>
+</html>
